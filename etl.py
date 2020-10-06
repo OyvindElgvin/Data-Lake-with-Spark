@@ -24,123 +24,120 @@ def create_spark_session():
 
 
 
-# path to full logs - song_data/*/*/*/*.json
-# SONG_DATA = s3a://udacity-dend/song_data/*/*/*/*.json
-
-"""
- |-- artist_id: string (nullable = true)
- |-- artist_latitude: double (nullable = true)
- |-- artist_location: string (nullable = true)
- |-- artist_longitude: double (nullable = true)
- |-- artist_name: string (nullable = true)
- |-- duration: double (nullable = true)
- |-- num_songs: long (nullable = true)
- |-- song_id: string (nullable = true)
- |-- title: string (nullable = true)
- |-- year: long (nullable = true)
- """
-
-
-
 def process_song_data(spark, input_data, output_data):
     # get filepath to song data file
-    song_data = input_data + 'song_data/A/A/A/*.json'
+    song_data = input_data + 'song_data/A/A/A/*.json' # THIS IS ONLY A SMALL PART OF THE WHOLE SET
 
     # read song data file
     df = spark.read.json(path = song_data, multiLine = True)
+    print('Loaded and read song_data files from s3')
 
     # extract columns to create songs table
     songs_table = df.select('song_id', 'title', 'artist_id', 'year', 'duration').drop_duplicates()
 
     # write songs table to parquet files partitioned by year and artist
-    songs_table.write.partitionBy('year', 'artist_id').parquet('songs_table.parquet', 'overwrite')
+    songs_table.write.partitionBy('year', 'artist_id').parquet('songs_table', 'overwrite')
+    print('Wrote songs_table to parquet locally')
+    #print("Number of rows in songs_table = {}".format(songs_table.count()))
+    #print('songs_table: ')
+    #songs_table.printSchema()
+    #songs_table.limit(5).show()
 
     # extract columns to create artists table
-    artists_table = df.select('artist_id', 'artist_name', 'artist_location', 'artist_latitude', 'artist_longitude')
+    artists_table = df.selectExpr('artist_id as artist', \
+                                  'artist_name as name', \
+                                  'artist_location as location', \
+                                  'artist_latitude as latitude', \
+                                  'artist_longitude as longitude')
+
 
     # write artists table to parquet files
-    artists_table.write.parquet('artists_table.parquet', 'overwrite')
+    artists_table.write.parquet('artists_table', 'overwrite')
+    print('Wrote artists_table to parquet locally')
+    #print("Number of rows in artists_table = {}".format(artists_table.count()))
+    #print('artists_table: ')
+    #artists_table.printSchema()
+    #artists_table.limit(5).show()
 
 
-
-# LOG_DATA=s3a://udacity-dend/log-data/*.json
-
-"""
- |-- artist: string (nullable = true)
- |-- auth: string (nullable = true)
- |-- firstName: string (nullable = true)
- |-- gender: string (nullable = true)
- |-- itemInSession: long (nullable = true)
- |-- lastName: string (nullable = true)
- |-- length: double (nullable = true)
- |-- level: string (nullable = true)
- |-- location: string (nullable = true)
- |-- method: string (nullable = true)
- |-- page: string (nullable = true)
- |-- registration: double (nullable = true)
- |-- sessionId: long (nullable = true)
- |-- song: string (nullable = true)
- |-- status: long (nullable = true)
- |-- ts: long (nullable = true)
- |-- userAgent: string (nullable = true)
- |-- userId: string (nullable = true)
-"""
 
 def process_log_data(spark, input_data, output_data):
+
     # get filepath to log data file
     log_data = os.path.join(input_data + 'log-data/*/*/*.json')
 
     # read log data file
-    df = spark.read.json(path = log_data, multiLine = True)
+    log_df = spark.read.json(path = log_data, multiLine = True)
+    print('Loaded and read log_data files from s3')
 
     # filter by actions for song plays
-    df = df.where(df.page == 'NextSong')
+    log_df = log_df.where(log_df.page == 'NextSong')
 
     # extract columns for users table
-    users_table = df.select('userId', 'firstName', 'lastName', 'gender', 'level').drop_duplicates()
+    users_table = log_df.select('userId', 'firstName', 'lastName', 'gender', 'level').drop_duplicates().where(col("userId").isNotNull())
 
     # write users table to parquet files
     users_table.write.parquet('users_table', 'overwrite')
+    print('Wrote users_table to parquet locally')
+    #print("Number of rows in users_table = {}".format(users_table.count()))
+    #print('users_table: ')
+    #users_table.printSchema()
+    #users_table.limit(5).show()
 
     # create timestamp column from original timestamp column
     get_timestamp = udf(lambda ms: datetime.fromtimestamp((ms/1000.0)), TimestampType())
-    df = df.withColumn('start_time', get_timestamp(df.ts))
-
-    """
-    print("Number of rows = {}".format(df.count()))
-    df.printSchema()
-    df.select('start_time').limit(10).show()
-    df.limit(5).show()
-    """
+    log_df_time = log_df.withColumn('start_time', get_timestamp(log_df.ts))
 
     # create datetime column from original timestamp column
-    get_datetime = udf(lambda ms: datetime.fromtimestamp((ms/1000.0)), DateType())
-    df = df.withColumn('datetime', get_datetime(df.ts))
+    # get_datetime = udf(lambda ms: datetime.fromtimestamp((ms/1000.0)), DateType())
+    # df = df.withColumn('datetime', get_datetime(df.ts))
 
-    # start_time, hour, day, week, month, year, weekday
     # extract columns to create time table
-    time_table = df.select('ts', 'start_time', 'datetime', year(df.datetime).alias('year'), month(df.datetime).alias('month')).drop_duplicates()
+    time_table = log_df_time.select('start_time', hour('start_time').alias('hour'),\
+                                               dayofmonth('start_time').alias('day'),\
+                                               weekofyear('start_time').alias('week'),\
+                                               month('start_time').alias('month'),\
+                                               year('start_time').alias('year'),\
+                                               date_format('start_time', 'u').alias('weekday'))
 
-    time_table.printSchema()
-    time_table.limit(5).show()
-    print("Number of rows in time_table = {}".format(time_table.count()))
+
+
+
 
     # write time table to parquet files partitioned by year and month
-    time_table.write.partitionBy('year', 'month').parquet('time_table.parquet', 'overwrite')
+    time_table.write.partitionBy('year', 'month').parquet('time_table', 'overwrite')
+    print('Wrote time_table to parquet locally')
+    #print("Number of rows in time_table = {}".format(time_table.count()))
+    #print('time_table: ')
+    #time_table.printSchema()
+    #time_table.limit(5).show()
 
-    # song_id, artist_id, artist_location from songs_table
-    # songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location, user_agent
+    # get (song_id, artist_id, artist_location) from songs_table
+    # get (songplay_id, start_time, user_id, level, session_id, user_agent) from log_table
     # read in song data to use for songplays table
+    song_df = spark.read.parquet('songs_table/*/*/*.parquet')
+    print('Read locally from songs_table into song_df')
+    print("Number of rows in song_df = {}".format(song_df.count()))
+    print('song_df: ')
+    song_df.printSchema()
+    song_df.limit(5).show()
+
+    artists_df = spark.read.parquet('artists_table/*.parquet')
+    print('Read locally from artists_table into artists_df')
+    print("Number of rows in artists_df = {}".format(artists_df.count()))
+    print('artists_df: ')
+    artists_df.printSchema()
+    artists_df.limit(5).show()
+
+
 
 
 
     # read song data file
-    songs_data_local_path = './songs_table/*/*/*'
-    song_df = spark.read.json(path = songs_data_local_path, multiLine = True)
-    song_df.printSchema()
+
 
     # extract columns from joined song and log datasets to create songplays table
-    #songplays_table =
+    #songplays_table = log_df.join(song_df)where()
 
     # write songplays table to parquet files partitioned by year and month
     #songplays_table
