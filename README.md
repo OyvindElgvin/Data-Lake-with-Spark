@@ -33,3 +33,14 @@ The files used to make the etl, , and the warehouse are:
 
 ## Launch
 Run the etl.py file to load and insert into the new fact and dimension tables.
+
+### Setting up the aws environment
+create a s3 and set the key pair to
+Spark-cluster-new-key-pair
+start an EMR cluster
+take the notebook and change to the new cluster
+check that it runs
+open an ssh with the correct address
+ssh -i ~/.ssh/Spark-cluster-new-key-pair.pem hadoop@ec2-44-228-130-215.us-west-2.compute.amazonaws.com -ND 8157
+run the EEEMMMRRRR thing with the correct cluster-id
+aws emr ssh --cluster-id j-2MD2LOY3F7AO4 --key-pair-file ~/.ssh/Spark-cluster-new-key-pair.pem
