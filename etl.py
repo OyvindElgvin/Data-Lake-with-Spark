@@ -17,6 +17,7 @@ from pyspark.sql.types import IntegerType, TimestampType, DateType
 from pyspark.sql.functions import udf, col, from_unixtime, to_timestamp, monotonically_increasing_id
 from pyspark.sql.functions import year, month, dayofmonth, hour, weekofyear, date_format
 
+# Comment these out if running on EMR cluster
 """
 config = configparser.ConfigParser()
 config.read('dl.cfg')
