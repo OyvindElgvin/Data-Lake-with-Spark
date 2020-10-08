@@ -12,9 +12,10 @@ import configparser
 from datetime import datetime
 import os
 from pyspark.sql import SparkSession
-from pyspark.sql.types import IntegerType, TimestampType, DateType
+from pyspark.sql.types import IntegerType, TimestampType
 from pyspark.sql.functions import udf, col, from_unixtime, to_timestamp, monotonically_increasing_id
 from pyspark.sql.functions import year, month, dayofmonth, hour, weekofyear, date_format
+
 
 # Comment these out if running on EMR cluster
 """
@@ -232,11 +233,12 @@ def main():
     input_data = "s3a://udacity-dend/"
     output_data = "s3a://datalakebucketudacity/"
 
-
     process_song_data(spark, input_data, output_data)
     process_log_data(spark, input_data, output_data)
 
     print('\nJob done!\n')
+
+
 
 
 if __name__ == "__main__":
