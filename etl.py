@@ -11,7 +11,6 @@ another directory, and thus creating a Data Lake.
 import configparser
 from datetime import datetime
 import os
-import timeit
 from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType, TimestampType, DateType
 from pyspark.sql.functions import udf, col, from_unixtime, to_timestamp, monotonically_increasing_id
