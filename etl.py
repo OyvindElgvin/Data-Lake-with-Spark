@@ -3,7 +3,7 @@
 This file is an etl script, extracting json files
 from a s3 bucket, transforming the data in Spark
 to fact and dimension tables, loads them into
-another directory, and thus creating a Data Lake.
+another S3 directory, and thus creating a Data Lake.
 
 """
 
