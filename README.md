@@ -35,6 +35,10 @@ $ which spark-submit
 Submit file with this command:  
 /usr/bin/spark-submit --master yarn ./etl.py  
 
+### Jupyter Notebook in EMR
+You could also open the Data-Lake-Notebook.ipynb notebook in the EMR cluster. 
+
+
 ## License
 
 MIT License
