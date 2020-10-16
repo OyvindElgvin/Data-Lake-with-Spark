@@ -31,7 +31,7 @@ $ pyspark
 
 To run the etl.py file you need to submit file to cluster:  
 $ which spark-submit  
->>> /usr/bin/spark-submit  
+ - /usr/bin/spark-submit  
 Submit file with this command:  
 /usr/bin/spark-submit --master yarn ./etl.py  
 
