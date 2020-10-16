@@ -1,6 +1,5 @@
-# Project: Data Lake
-This is an ETL, 'Extract, Transform, and Load', pipeline for the company Sparkify that extracts the data from S3, transforms the data in Apache Spark into a set of fact and dimensional tables for their analytics team to continue finding insights in what songs their users are listening to.
-
+# Project: Data Lake with Spark
+This is an ETL, 'Extract, Transform, and Load', pipeline for the company Sparkify that extracts data from S3, transforms the data in Apache Spark into a set of fact and dimensional tables for their analytics team to continue finding insights in what songs their users are listening to. This move from legacy Data Warehouse to a Data Lake will give the analytics team at Sparkify faster transformation of the data, and reduce the cost of operation.
 
 
 
@@ -11,7 +10,7 @@ This is an ETL, 'Extract, Transform, and Load', pipeline for the company Sparkif
 * [Launch](#launch)
 
 ## Significance
-This move from legacy Data Warehouse to a Data Lake will give the analytics team at Sparkify faster transformation of the data, and reduce the cost of operation.
+
 
 
 ## Files
