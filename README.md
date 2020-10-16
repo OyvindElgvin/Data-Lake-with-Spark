@@ -16,8 +16,6 @@ This move from legacy Data Warehouse to a Data Lake will give the analytics team
 
 ## Files
 The files used to make the etl, , and the warehouse are:
-* dl.cfg
-	* This file stores the credentials to the IAM role, which opens the path to the json files where the data is originally stored.
 * etl.py
 	* This file automates the extracting, transformation, and loading into the fact and dimension tables in the data lake.
 
