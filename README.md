@@ -1,10 +1,10 @@
 # Project: Data Lake with Spark
-This is an ETL, 'Extract, Transform, and Load', pipeline for the company Sparkify that extracts data from S3, transforms the data in Apache Spark into a set of fact and dimensional tables, and store the new data in another S3 bucket. This will give their analytics team the ability to easily find insights in what songs their users are listening to. This move from legacy Data Warehouse to a Data Lake will give the analytics team at Sparkify faster transformation of the data, and reduce the cost of operation.
+This project creates an 'Extract, Transform, and Load' pipeline, also called an ETL pipeline, for the company Sparkify that extracts data from S3, transforms the data in Apache Spark into a set of fact and dimensional tables, and store the new data in another S3 bucket. This will give their analytics team the ability to easily find insights into what songs their users are listening to. This move from legacy Data Warehouse to a Data Lake will give the analytics team at Sparkify faster transformation of the data, and reduce the cost of operation.
 
 
 
 ## Files
-The files used to make the etl, , and the warehouse are:
+The files used to make the ETL and Data Warehouse are:
 * etl.py
 	* This file automates the extracting, transformation, and loading into the fact and dimension tables in the data lake.
 
@@ -22,16 +22,25 @@ The files used to make the etl, , and the warehouse are:
 Run the etl.py file to load and insert into the new fact and dimension tables.
 
 ### Setting up the aws environment
-create a s3 and set the key pair to
-Spark-cluster-new-key-pair
-start an EMR cluster
-take the notebook and change to the new cluster
-check that it runs
-open an ssh with the correct address
-ssh -i ~/.ssh/Spark-cluster-new-key-pair.pem hadoop@ec2-44-228-130-215.us-west-2.compute.amazonaws.com -ND 8157
-run the EEEMMMRRRR thing with the correct cluster-id
+Create a S3 bucket.
+In AWS EMR, go to notebooks and select the Change Data Lake cluster to create a EMR cluster
+Check the notebook and not the cluster ID.
+Open an ssh with the correct address:
+Run these two to open the ssh:
+ssh -i ~/.ssh/pem-file.pem hadoop@ec2-[ADDRESS].us-west-2.compute.amazonaws.com -ND 8157
 aws emr ssh --cluster-id j-2MD2LOY3F7AO4 --key-pair-file ~/.ssh/Spark-cluster-new-key-pair.pem
 
+If you need to change kernel to pyspark inside EMR cli do the following:
+https://aws.amazon.com/premiumsupport/knowledge-center/emr-pyspark-python-3x/
+sudo sed -i -e '$a\export PYSPARK_PYTHON=/usr/bin/python3' /etc/spark/conf/spark-env.sh
+Check with 
+$ pyspark
+
+To run the etl.py file you need to submit file to cluster:
+$ which spark-submit
+>>> /usr/bin/spark-submit
+Submit file with this command:
+/usr/bin/spark-submit --master yarn ./etl.py
 
 ## License
 
