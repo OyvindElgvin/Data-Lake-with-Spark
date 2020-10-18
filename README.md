@@ -25,8 +25,8 @@ ssh -i ~/.ssh/pem-file.pem hadoop@ec2-[ADDRESS].us-west-2.compute.amazonaws.com 
 aws emr ssh --cluster-id j-2MD2LOY3F7AO4 --key-pair-file ~/.ssh/Spark-cluster-new-key-pair.pem  
 ```
 
-If you need to change kernel to pyspark inside EMR cli do the following:  
-https://aws.amazon.com/premiumsupport/knowledge-center/emr-pyspark-python-3x/  
+If you need to [change kernel to pyspark](https://aws.amazon.com/premiumsupport/knowledge-center/emr-pyspark-python-3x/  ) inside EMR cli, fo the following:  
+
 ```
 sudo sed -i -e '$a\export PYSPARK_PYTHON=/usr/bin/python3' /etc/spark/conf/spark-env.sh  
 ```
