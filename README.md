@@ -46,8 +46,8 @@ Submit file with this command:
 ```
 
 ### Jupyter Notebook in EMR
-To load a jupyter notebook to an EMR cluster follow [this tutorial](https://searchaws.techtarget.com/video/Set-up-a-Jupyter-notebook-on-AWS-with-this-tutorial), it's basically, creating an EMR cluster with a VPC and two subnets, one public and one private. Then link to a github repo and use the 'open in jupyter' option in the EMR cluster. 
-
+To load a jupyter notebook to an EMR cluster create a notebook in the EMR consol and use the 'open in Jupyter' option, not the 'JupyterLab'
+option. From there you use the upload function in the window where you choose your notebook. This will add a notebook to the EMR cluster. 
 
 
 ## License
