@@ -46,7 +46,8 @@ Submit file with this command:
 ```
 
 ### Jupyter Notebook in EMR
-You could also open the Data-Lake-Notebook.ipynb notebook in the EMR cluster. 
+To load a jupyter notebook to an EMR cluster follow [this tutorial](https://searchaws.techtarget.com/video/Set-up-a-Jupyter-notebook-on-AWS-with-this-tutorial), it's basically, creating an EMR cluster with a VPC and two subnets, one public and one private. Then link to a github repo and use the 'open in jupyter' option in the EMR cluster. 
+
 
 
 ## License
