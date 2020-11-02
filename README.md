@@ -15,7 +15,7 @@ This project creates an 'Extract, Transform, and Load' pipeline, also called an 
 Run the etl.py file to load and insert into the new fact and dimension tables.
 
 ### Setting up the aws environment and cli
-Create a S3 bucket.  
+Create an S3 bucket.  
 In AWS EMR, go to notebooks and select the Change Data Lake cluster to create a EMR cluster.  
 Check the notebook and not the cluster ID.  
 Open an ssh with the correct address:  
