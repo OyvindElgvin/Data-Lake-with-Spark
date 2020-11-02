@@ -25,7 +25,7 @@ ssh -i ~/.ssh/pem-file.pem hadoop@ec2-[ADDRESS].us-west-2.compute.amazonaws.com 
 aws emr ssh --cluster-id j-2MD2LOY3F7AO4 --key-pair-file ~/.ssh/Spark-cluster-new-key-pair.pem  
 ```
 
-If you need to [change kernel to pyspark](https://aws.amazon.com/premiumsupport/knowledge-center/emr-pyspark-python-3x/  ) inside EMR cli, fo the following:  
+If you need to [change kernel to pyspark](https://aws.amazon.com/premiumsupport/knowledge-center/emr-pyspark-python-3x/  ) inside EMR cli, do the following:  
 
 ```
 sudo sed -i -e '$a\export PYSPARK_PYTHON=/usr/bin/python3' /etc/spark/conf/spark-env.sh  
@@ -46,7 +46,8 @@ Submit file with this command:
 ```
 
 ### Jupyter Notebook in EMR
-You could also open the Data-Lake-Notebook.ipynb notebook in the EMR cluster.
+To load a jupyter notebook to an EMR cluster create a notebook in the EMR consol and use the 'open in Jupyter' option, not the 'JupyterLab'
+option. From there you use the upload function in the window where you choose your notebook. This will add a notebook to the EMR cluster.
 
 
 ## License
